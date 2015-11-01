@@ -8,6 +8,7 @@ RUN apt-get update && apt-get -y install zip unzip nano apt-utils curl rsync git
 
 RUN apt-get update && apt-get -y --force-yes install python && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
 RUN apt-get update && apt-get -y --force-yes install python-pip && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
+RUN apt-get update && apt-get -y --force-yes install python-dev && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
 RUN apt-get update && apt-get -y --force-yes install libffi-dev && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
 RUN apt-get update && apt-get -y --force-yes install libssl-dev && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
 RUN apt-get update && apt-get -y --force-yes install libffi-dev && rm -f /var/cache/apt/archives/*deb && find /var/lib/apt/lists/ -type f -delete
@@ -21,4 +22,5 @@ RUN pip install --upgrade pip
 RUN pip install requests
 RUN pip install -r requirements.txt --allow-external pYsearch --allow-unverified pYsearch
 
+ENV PYTHONPATH=/pywikibot/
 CMD ["bash"]
