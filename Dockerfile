@@ -1,4 +1,4 @@
-FROM debian:7
+FROM debian:8
 
 MAINTAINER wikitolearn sysadmin@wikitolearn.org
 ENV DEBIAN_FRONTEND noninteractive
@@ -22,5 +22,4 @@ RUN pip install --upgrade pip
 RUN pip install requests
 RUN pip install -r requirements.txt --allow-external pYsearch --allow-unverified pYsearch
 
-ENV PYTHONPATH=/pywikibot/
 CMD ["bash"]
