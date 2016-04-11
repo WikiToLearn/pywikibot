@@ -21,7 +21,7 @@ class Family(family.Family):
             'en': 'en.wikitolearn.org',
             'devit': 'it.wikitolearn.vodka',
             'deven': 'en.wikitolearn.vodka',
-            'localit': 'en.tuttorotto.biz',
+            'localit': 'it.tuttorotto.biz',
             'localen': 'en.tuttorotto.biz',
         }
 
