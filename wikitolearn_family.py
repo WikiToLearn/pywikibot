@@ -19,8 +19,10 @@ class Family(family.Family):
         self.langs = {
             'it': 'it.wikitolearn.org',
             'en': 'en.wikitolearn.org',
+            'pool': 'pool.wikitolearn.org',
             'devit': 'it.wikitolearn.vodka',
             'deven': 'en.wikitolearn.vodka',
+            'devpool': 'pool.wikitolearn.vodka',
             'localit': 'it.tuttorotto.biz',
             'localen': 'en.tuttorotto.biz',
         }
@@ -29,8 +31,10 @@ class Family(family.Family):
         return {
             'it': '',
             'en': '',
+            'pool': '',
             'devit': '',
             'deven': '',
+            'devpool':'',
             'localit': '',
             'localen': '',
         }[code]
@@ -40,8 +44,10 @@ class Family(family.Family):
         return {
             'it': u'1.25.2',
             'en': u'1.25.2',
+            'pool': u'1.25.2',
             'devit': u'1.25.2',
             'deven': u'1.25.2',
+            'devpool': u'1.25.2',
             'localit': u'1.25.2',
             'localen': u'1.25.2',
         }[code]
@@ -50,8 +56,10 @@ class Family(family.Family):
         return {
             'it': u'http',
             'en': u'http',
+            'pool': u'http',
             'devit': u'http',
             'deven': u'http',
+            'devpool': u'http',
             'localit': u'http',
             'localen': u'http',
         }[code]
