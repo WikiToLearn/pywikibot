@@ -42,14 +42,14 @@ class Family(family.Family):
     @deprecated('APISite.version()')
     def version(self, code):
         return {
-            'it': u'1.25.2',
-            'en': u'1.25.2',
-            'pool': u'1.25.2',
-            'devit': u'1.25.2',
-            'deven': u'1.25.2',
-            'devpool': u'1.25.2',
-            'localit': u'1.25.2',
-            'localen': u'1.25.2',
+            'it': u'1.27.0',
+            'en': u'1.27.0',
+            'pool': u'1.27.0',
+            'devit': u'1.27.0',
+            'deven': u'1.27.0',
+            'devpool': u'1.27.0',
+            'localit': u'1.27.0',
+            'localen': u'1.27.0',
         }[code]
 
     def protocol(self, code):
