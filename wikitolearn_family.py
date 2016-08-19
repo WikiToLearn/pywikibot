@@ -26,7 +26,7 @@ class Family(family.Family):
             'devmeta': 'meta.wikitolearn.org',
             'devpool': 'pool.wikitolearn.vodka',
             'localit': 'it.tuttorotto.biz',
-            'localen': 'en.tuttorotto.biz',
+            'localen': 'en.tuttorotto.biz'
         }
 
     def scriptpath(self, code):
@@ -38,9 +38,9 @@ class Family(family.Family):
             'devit': '',
             'deven': '',
             'devmeta': '',
-            'devpool':'',
+            'devpool': '',
             'localit': '',
-            'localen': '',
+            'localen': ''
         }[code]
 
     @deprecated('APISite.version()')
@@ -48,24 +48,26 @@ class Family(family.Family):
         return {
             'it': u'1.27.0',
             'en': u'1.27.0',
-            'meta:' u'1.27.0',
+            'meta': u'1.27.0',
             'pool': u'1.27.0',
             'devit': u'1.27.0',
             'deven': u'1.27.0',
-            'devmeta:' u'1.27.0',
+            'devmeta': u'1.27.0',
             'devpool': u'1.27.0',
             'localit': u'1.27.0',
-            'localen': u'1.27.0',
+            'localen': u'1.27.0'
         }[code]
 
     def protocol(self, code):
         return {
             'it': u'http',
             'en': u'http',
+            'meta': u'http',
             'pool': u'http',
             'devit': u'http',
             'deven': u'http',
+            'devmeta': u'http',
             'devpool': u'http',
             'localit': u'http',
-            'localen': u'http',
+            'localen': u'http'
         }[code]
