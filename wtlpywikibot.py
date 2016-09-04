@@ -6,10 +6,13 @@ from pywikibot.data import api
 from pywikibot.site import LoginStatus
 import pywikibot
 
+pywikibot.family.Family.load('wikitolearn')
+
+
 # allow login to the website the easy way, without user-config.py
 # return True if the login was successfull, False otherwise
-def login(family, lang, username, password, sysop=False, retry=True):
-    site = pywikibot.Site(lang,'wikitolearn')
+def login(lang, family, username, password, sysop=False, retry=True):
+    site = pywikibot.Site(lang,family)
 
     site._loginStatus = LoginStatus.IN_PROGRESS
     if hasattr(site, "_userinfo"):
@@ -17,7 +20,7 @@ def login(family, lang, username, password, sysop=False, retry=True):
 
     loginMan = api.LoginManager(site=site, sysop=sysop,
                          user=username, password=password)
-    
+
     if loginMan.login(retry):
         site._username[sysop] = loginMan.username
         if hasattr(site, "_userinfo"):
@@ -28,4 +31,3 @@ def login(family, lang, username, password, sysop=False, retry=True):
     else:
         site._loginstatus = LoginStatus.NOT_LOGGED_IN
         return False
-
