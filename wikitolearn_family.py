@@ -13,7 +13,7 @@ class Family(family.Family):
             'pool': 'pool.wikitolearn.org',
             'devit': 'it.wikitolearn.vodka',
             'deven': 'en.wikitolearn.vodka',
-            'devmeta': 'meta.wikitolearn.org',
+            'devmeta': 'meta.wikitolearn.vodka',
             'devpool': 'pool.wikitolearn.vodka',
             'localit': 'it.tuttorotto.biz',
             'localen': 'en.tuttorotto.biz',
