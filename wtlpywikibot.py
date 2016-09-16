@@ -4,10 +4,13 @@ os.environ["PYWIKIBOT2_NO_USER_CONFIG"] = "1"
 
 from pywikibot.data import api
 from pywikibot.site import LoginStatus
+from pywikibot import textlib
 import pywikibot
+import requests
+import urllib.parse as urlparse
+import time
 
 pywikibot.family.Family.load('wikitolearn')
-
 
 # allow login to the website the easy way, without user-config.py
 # return True if the login was successfull, False otherwise
@@ -31,3 +34,72 @@ def login(lang, family, username, password, sysop=False, retry=True):
     else:
         site._loginstatus = LoginStatus.NOT_LOGGED_IN
         return False
+
+def category_status(site, page, cat, status):
+    old_text = page.text
+    cats = textlib.getCategoryLinks(old_text)
+    catpl = pywikibot.Category(site, cat)
+
+    if status:
+        if catpl not in cats:
+            cats.append(catpl)
+    else:
+        if catpl in cats:
+            cats.remove(catpl)
+    text = textlib.replaceCategoryLinks(page.text, cats, site=site)
+    if old_text != text:
+        page.text = text
+        page.save(minor=True, botflag=True)
+        return True
+    return False
+
+
+def checkPDFforPage(site,page_title,oldid=None):
+    result_bool = None
+    result_text = None
+    try:
+        headers = {
+            'User-Agent': 'PDF Check - WikiToLearn'
+        }
+
+        if oldid == None:
+            page = pywikibot.Page(site,page_title)
+            oldid = urlparse.parse_qs(urlparse.urlparse(page.permalink()).query)['oldid']
+        args = {'title': 'Speciale:Libro', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
+        url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
+
+        collection_id_request = requests.head(url, headers=headers, allow_redirects=False)
+        collection_id_data = urlparse.parse_qs(urlparse.urlparse(collection_id_request.headers['Location']).query)
+        collection_id = collection_id_data['collection_id'][0]
+
+        url_check = site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?action=ajax&rs=wfAjaxGetMWServeStatus&rsargs%5B%5D=" + collection_id + "&rsargs%5B%5D=rdf2latex";
+
+        checks = 0
+        print("\tChecking PDF Generation Status")
+
+        running = True
+        while running:
+            print("\tRequesting Status " + str(checks) + "...")
+            r_checkStatus = requests.get(url_check, headers=headers)
+            checks+=1
+
+            status = r_checkStatus.json()[u"status"]
+
+            if(status["progress"] == "100.00"):
+                result_bool = True
+                result_text = "PDF OK"
+                running = False
+                print("FINISH")
+            elif("error" in status["status"].lower()) or ("died" in status["status"].lower()):
+                result_bool = False
+                result_text = status['status']
+                running = False
+                print("FAIL")
+                print(status)
+            else:
+                time.sleep(1)
+
+    except requests.exceptions.RequestException as e:
+        result_bool = False
+        result_text = str(e)
+    return result_bool,result_text
