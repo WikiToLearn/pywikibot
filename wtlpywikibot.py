@@ -14,9 +14,7 @@ pywikibot.family.Family.load('wikitolearn')
 
 # allow login to the website the easy way, without user-config.py
 # return True if the login was successfull, False otherwise
-def login(lang, family, username, password, sysop=False, retry=True):
-    site = pywikibot.Site(lang,family)
-
+def login(site, username, password, sysop=False, retry=True):
     site._loginStatus = LoginStatus.IN_PROGRESS
     if hasattr(site, "_userinfo"):
         del site._userinfo
@@ -35,7 +33,13 @@ def login(lang, family, username, password, sysop=False, retry=True):
         site._loginstatus = LoginStatus.NOT_LOGGED_IN
         return False
 
-def category_status(site, page, cat, status):
+def get_category_status(site, page, cat):
+    old_text = page.text
+    cats = textlib.getCategoryLinks(old_text)
+    catpl = pywikibot.Category(site, cat)
+    return catpl in cats
+
+def set_category_status(site, page, cat, status):
     old_text = page.text
     cats = textlib.getCategoryLinks(old_text)
     catpl = pywikibot.Category(site, cat)
