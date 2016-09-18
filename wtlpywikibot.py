@@ -58,7 +58,7 @@ def set_category_status(site, page, cat, status):
     return False
 
 
-def checkPDFforPage(site,page_title,oldid=None):
+def checkPDFforPage(site,page_title,oldid=None,debug=False):
     result_bool = None
     result_text = None
     try:
@@ -79,28 +79,42 @@ def checkPDFforPage(site,page_title,oldid=None):
         url_check = site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?action=ajax&rs=wfAjaxGetMWServeStatus&rsargs%5B%5D=" + collection_id + "&rsargs%5B%5D=rdf2latex";
 
         checks = 0
-        print("\tChecking PDF Generation Status")
+        if debug:
+            print("Checking PDF Generation Status")
 
+        last_progress = None
+        last_status = None
+        count_last_progress_and_status = 0
         running = True
         while running:
-            print("\tRequesting Status " + str(checks) + "...")
+            if debug:
+                print("Requesting Status " + str(checks) + "...")
             r_checkStatus = requests.get(url_check, headers=headers)
             checks+=1
 
             status = r_checkStatus.json()[u"status"]
 
-            if(status["progress"] == "100.00"):
+            if debug:
+                print(status)
+                print(count_last_progress_and_status)
+            if status["progress"] == "100.00":
                 result_bool = True
                 result_text = "PDF OK"
                 running = False
-                print("FINISH")
-            elif("error" in status["status"].lower()) or ("died" in status["status"].lower()):
+                if debug:
+                    print("FINISH")
+            elif count_last_progress_and_status >= 60 or "error" in status["status"].lower() or "died" in status["status"].lower():
                 result_bool = False
                 result_text = status['status']
                 running = False
-                print("FAIL")
-                print(status)
+                if debug:
+                    print("FAIL")
+                    print(status)
             else:
+                if status["status"] == last_status and status["progress"] == last_progress:
+                    count_last_progress_and_status = count_last_progress_and_status + 1
+                last_status = status["status"]
+                last_progress = status["progress"]
                 time.sleep(1)
 
     except requests.exceptions.RequestException as e:
