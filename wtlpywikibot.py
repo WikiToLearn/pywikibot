@@ -69,10 +69,14 @@ def checkPDFforPage(site,page_title,oldid=None,debug=False):
         if oldid == None:
             page = pywikibot.Page(site,page_title)
             oldid = urlparse.parse_qs(urlparse.urlparse(page.permalink()).query)['oldid']
-        args = {'title': 'Speciale:Libro', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
+        args = {'title': 'Special:Book', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
         url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
+        collection_id_request = requests.head(url, headers=headers, allow_redirects=True)
+        if len(collection_id_request.history) == 2:
+            collection_id_request = collection_id_request.history[1]
+        else:
+            collection_id_request = collection_id_request.history[0]
 
-        collection_id_request = requests.head(url, headers=headers, allow_redirects=False)
         collection_id_data = urlparse.parse_qs(urlparse.urlparse(collection_id_request.headers['Location']).query)
         collection_id = collection_id_data['collection_id'][0]
 
