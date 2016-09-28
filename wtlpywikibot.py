@@ -71,13 +71,14 @@ def checkPDFforPage(site,page_title,oldid=None,debug=False):
             oldid = urlparse.parse_qs(urlparse.urlparse(page.permalink()).query)['oldid']
         args = {'title': 'Special:Book', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
         url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
-        collection_id_request = requests.head(url, headers=headers, allow_redirects=True)
-        if len(collection_id_request.history) == 2:
-            collection_id_request = collection_id_request.history[1]
-        else:
-            collection_id_request = collection_id_request.history[0]
+        collection_id_request_with_redirects = requests.head(url, headers=headers, allow_redirects=True)
+
+        collection_id_request = collection_id_request_with_redirects.history[len(collection_id_request_with_redirects.history)-1]
 
         collection_id_data = urlparse.parse_qs(urlparse.urlparse(collection_id_request.headers['Location']).query)
+
+        if debug:
+            print(collection_id_data)
         collection_id = collection_id_data['collection_id'][0]
 
         url_check = site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?action=ajax&rs=wfAjaxGetMWServeStatus&rsargs%5B%5D=" + collection_id + "&rsargs%5B%5D=rdf2latex";
