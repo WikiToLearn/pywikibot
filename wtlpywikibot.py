@@ -34,10 +34,14 @@ def login(site, username, password, sysop=False, retry=True):
         return False
 
 def get_category_status(site, page, cat):
+    state = False
     old_text = page.text
     cats = textlib.getCategoryLinks(old_text)
     catpl = pywikibot.Category(site, cat)
-    return catpl in cats
+    for c in cats:
+        if c.title() == catpl.title():
+            state = True
+    return state
 
 def set_category_status(site, page, cat, status):
     old_text = page.text
