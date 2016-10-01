@@ -83,7 +83,7 @@ output = output + "    def protocol(self, code):" + "\n"
 output = output + "        return {" + "\n"
 for domain in domains:
     for lang in langs:
-        output = output + "            '{}': u'http',".format(domain_code[domain]+lang) + "\n"
+        output = output + "            '{}': u'https',".format(domain_code[domain]+lang) + "\n"
 output = output + "        }[code]" + "\n"
 
 text_file = open(pywikibot_wikitolearn_family_file, "w")

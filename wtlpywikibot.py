@@ -12,6 +12,13 @@ import time
 
 pywikibot.family.Family.load('wikitolearn')
 
+pywikibot.config2.family = 'wikitolearn'
+
+def site(lang=None):
+    pywikibot.config2.mylang = lang
+    site = pywikibot.Site(lang,'wikitolearn')
+    return site
+
 # allow login to the website the easy way, without user-config.py
 # return True if the login was successfull, False otherwise
 def login(site, username, password, sysop=False, retry=True):
