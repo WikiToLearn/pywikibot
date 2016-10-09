@@ -38,6 +38,13 @@ domain_code = {
     "tuttorotto.org": "test",
     "tuttorotto.biz": "local"
 }
+
+domain_protocol = {
+    "wikitolearn.org": "u'https'",
+    "wikitolearn.vodka": "u'http'",
+    "tuttorotto.org": "u'http'",
+    "tuttorotto.biz": "u'http'"
+}
 langs = []
 
 for database in databases:
@@ -65,25 +72,17 @@ for domain in domains:
 output = output + "        }" + "\n"
 output = output + "\n"
 output = output + "    def scriptpath(self, code):" + "\n"
-output = output + "        return {" + "\n"
-for domain in domains:
-    for lang in langs:
-        output = output + "            '{}': '',".format(domain_code[domain]+lang) + "\n"
-output = output + "        }[code]" + "\n"
+output = output + "        return ''" + "\n"
 output = output + "\n"
 output = output + "    @deprecated('APISite.version()')" + "\n"
 output = output + "    def version(self, code):" + "\n"
-output = output + "        return {" + "\n"
-for domain in domains:
-    for lang in langs:
-        output = output + "            '{}': u'1.27.0',".format(domain_code[domain]+lang) + "\n"
-output = output + "        }[code]" + "\n"
+output = output + "        return u'1.27.0'" + "\n"
 output = output + "\n"
 output = output + "    def protocol(self, code):" + "\n"
 output = output + "        return {" + "\n"
 for domain in domains:
     for lang in langs:
-        output = output + "            '{}': u'https',".format(domain_code[domain]+lang) + "\n"
+        output = output + "            '{}': {},".format(domain_code[domain]+lang, domain_protocol[domain]) + "\n"
 output = output + "        }[code]" + "\n"
 
 text_file = open(pywikibot_wikitolearn_family_file, "w")
