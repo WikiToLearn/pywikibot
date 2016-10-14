@@ -9,6 +9,7 @@ import pywikibot
 import requests
 import urllib.parse as urlparse
 import time
+import re
 
 pywikibot.family.Family.load('wikitolearn')
 
@@ -68,6 +69,39 @@ def set_category_status(site, page, cat, status):
         return True
     return False
 
+
+def check_formula(site,tex):
+    restbase_base_url =  site.family.protocol(site.code) + "://restbase" +site.family.hostname(site.code)[site.family.hostname(site.code).index('.'):]  + "/" + site.family.hostname(site.code)
+    url_check = restbase_base_url + '/v1/media/math/check/tex'
+    header= {'Accept':'application/json',
+             'Content-Type': 'application/x-www-form-urlencoded'}
+    payload = {'q': tex}
+    r = requests.post(url_check, data=payload, headers = header)
+    if r.status_code == 200:
+        loc = r.headers['x-resource-location']
+        url_render = restbase_base_url + '/v1/media/math/render/'
+
+        headers_svg= {'Accept':'image/svg+xml',
+                 'Content-Type': 'application/x-www-form-urlencoded'}
+        r_svg = requests.get(url_render+"svg/"+loc, headers = headers_svg)
+        if r_svg.status_code != 200:
+            raise ValueError("svg failed")
+
+        headers_mml= {'Accept':'image/mathml+xml',
+        'Content-Type': 'application/x-www-form-urlencoded'}
+        r_mathml = requests.get(url_render+"mml/"+loc, headers = headers_mml)
+        if r_svg.status_code != 200:
+            raise ValueError("mml failed")
+    else:
+        raise ValueError("check failed")
+
+def extract_math(page):
+    maths = []
+    r = re.compile('<math\s*(\ .*)?\s*>(?P<tex>.*?)</math>', re.DOTALL)
+    for m in r.finditer(page.text):
+        math = m.group("tex")
+        maths.append(math.strip())
+    return maths
 
 def checkPDFforPage(site,page_title,oldid=None,debug=False):
     result_bool = None
