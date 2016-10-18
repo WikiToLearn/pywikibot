@@ -94,6 +94,7 @@ def check_formula(site,tex):
             raise ValueError("mml failed")
     else:
         raise ValueError("check failed")
+    return True
 
 def extract_math(page):
     maths = []
