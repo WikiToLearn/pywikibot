@@ -96,10 +96,10 @@ def check_formula(site,tex):
         raise ValueError("check failed")
     return True
 
-def extract_math(page):
+def extract_math(page_text):
     maths = []
     r = re.compile('<math\s*(\ .*)?\s*>(?P<tex>.*?)</math>', re.DOTALL)
-    for m in r.finditer(page.text):
+    for m in r.finditer(page_text):
         math = m.group("tex")
         maths.append(math.strip())
     return maths
