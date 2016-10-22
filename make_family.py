@@ -39,11 +39,11 @@ domain_code = {
     "tuttorotto.biz": "local"
 }
 
-domain_protocol = {
-    "wikitolearn.org": "u'https'",
-    "wikitolearn.vodka": "u'http'",
-    "tuttorotto.org": "u'http'",
-    "tuttorotto.biz": "u'http'"
+domain_to_ignore_certificate_error = {
+    "wikitolearn.org": "False",
+    "wikitolearn.vodka": "True",
+    "tuttorotto.org": "True",
+    "tuttorotto.biz": "True"
 }
 langs = []
 
@@ -74,16 +74,19 @@ output = output + "\n"
 output = output + "    def scriptpath(self, code):" + "\n"
 output = output + "        return ''" + "\n"
 output = output + "\n"
+output = output + "    def ignore_certificate_error(self, code):" + "\n"
+output = output + "        return {" + "\n"
+for domain in domains:
+    for lang in langs:
+        output = output + "            '{}': '{}',".format(domain_code[domain]+lang,domain_to_ignore_certificate_error[domain]) + "\n"
+output = output + "        }[code]" + "\n"
+output = output + "\n"
 output = output + "    @deprecated('APISite.version()')" + "\n"
 output = output + "    def version(self, code):" + "\n"
 output = output + "        return u'1.27.0'" + "\n"
 output = output + "\n"
 output = output + "    def protocol(self, code):" + "\n"
-output = output + "        return {" + "\n"
-for domain in domains:
-    for lang in langs:
-        output = output + "            '{}': {},".format(domain_code[domain]+lang, domain_protocol[domain]) + "\n"
-output = output + "        }[code]" + "\n"
+output = output + "        return u'https'" + "\n"
 
 text_file = open(pywikibot_wikitolearn_family_file, "w")
 text_file.write(output)
