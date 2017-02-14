@@ -78,7 +78,7 @@ output = output + "    def ignore_certificate_error(self, code):" + "\n"
 output = output + "        return {" + "\n"
 for domain in domains:
     for lang in langs:
-        output = output + "            '{}': '{}',".format(domain_code[domain]+lang,domain_to_ignore_certificate_error[domain]) + "\n"
+        output = output + "            '{}': {},".format(domain_code[domain]+lang,domain_to_ignore_certificate_error[domain]) + "\n"
 output = output + "        }[code]" + "\n"
 output = output + "\n"
 output = output + "    @deprecated('APISite.version()')" + "\n"
