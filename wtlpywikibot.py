@@ -104,7 +104,7 @@ def extract_math(page_text):
         maths.append(math.strip())
     return maths
 
-def checkPDFforPage(site,page_title,oldid=None,debug=False):
+def checkPDFforPage(site,page_title,oldid=None,debug=False,isCollection=False):
     result_bool = None
     result_text = None
     try:
@@ -112,12 +112,19 @@ def checkPDFforPage(site,page_title,oldid=None,debug=False):
             'User-Agent': 'PDF Check - WikiToLearn'
         }
 
-        if oldid == None:
-            page = pywikibot.Page(site,page_title)
-            oldid = urlparse.parse_qs(urlparse.urlparse(page.permalink()).query)['oldid']
-        args = {'title': 'Special:Book', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
-        url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
-        collection_id_request_with_redirects = requests.head(url, headers=headers, allow_redirects=True)
+        if isCollection:
+            if oldid != None:
+                raise ValueError("oldid is not supported in Collection mode")
+            args = {"title": "Special:Collection/render_collection/","writer":"rdf2latex","colltitle":page_title}
+            url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
+            collection_id_request_with_redirects = requests.head(url, headers=headers, allow_redirects=True)
+        else:
+            if oldid == None:
+                page = pywikibot.Page(site,page_title)
+                oldid = urlparse.parse_qs(urlparse.urlparse(page.permalink()).query)['oldid']
+            args = {'title': 'Special:Book', 'oldid': oldid, 'bookcmd': 'render_article', 'returnto': page_title, 'arttitle': page_title, 'writer': 'rdf2latex'}
+            url =  site.family.protocol(site.code) + "://" + site.family.hostname(site.code) + "/index.php?" + urlparse.urlencode(args)
+            collection_id_request_with_redirects = requests.head(url, headers=headers, allow_redirects=True)
 
         collection_id_request = collection_id_request_with_redirects.history[len(collection_id_request_with_redirects.history)-1]
 
