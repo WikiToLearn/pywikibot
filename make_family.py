@@ -27,23 +27,23 @@ with open(wtl_databases_conf_file) as f:
     f.close()
 domains = [
     "wikitolearn.org",
-    "wikitolearn.vodka",
+    "developtest.wikitolearn-test.org",
+    "local.wikitolearn-test.org",
     "broken-site.org",
-    "tuttorotto.biz"
 ]
 
 domain_code = {
     "wikitolearn.org": "",
-    "wikitolearn.vodka": "dev",
+    "developtest.wikitolearn-test.org": "dev",
+    "local.wikitolearn-test.org": "local",
     "broken-site.org": "test",
-    "tuttorotto.biz": "local"
 }
 
 domain_to_ignore_certificate_error = {
     "wikitolearn.org": "False",
-    "wikitolearn.vodka": "True",
+    "developtest.wikitolearn-test.org": "True",
+    "local.wikitolearn-test.org": "True",
     "broken-site.org": "True",
-    "tuttorotto.biz": "True"
 }
 langs = []
 
